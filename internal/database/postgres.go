@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/helloDevAman/movie-base/apis/config"
+	"github.com/helloDevAman/movie-base/config"
 	_ "github.com/lib/pq"
 )
 

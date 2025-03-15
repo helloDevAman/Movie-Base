@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/helloDevAman/movie-base/apis/config"
-	"github.com/helloDevAman/movie-base/apis/database"
-	"github.com/helloDevAman/movie-base/apis/routes"
+	"github.com/helloDevAman/movie-base/config"
+	"github.com/helloDevAman/movie-base/internal/database"
+	"github.com/helloDevAman/movie-base/internal/routes"
 )
 
 func main() {

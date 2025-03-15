@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 
-	"github.com/helloDevAman/movie-base/apis/config"
+	"github.com/helloDevAman/movie-base/config"
 )
 
 var ErrUnsupportedDatabase = errors.New("unsupported database type")
