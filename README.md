@@ -3,12 +3,25 @@
 Movie-Base is a Go-based backend API designed for getting movie details on fingure tips
 
 
-## 🔥 Features completed
-1. User authentication via OTP (Twilio integration)
-2. Secure MPIN-based login system
-3. PostgreSQL database for storing user data
-4. Custom error and success response format
-5. API versioning in headers
-6. Secure token-based authentication for sessions
+## 📜 API Endpoints
+| Method | Endpoint             | Description              |
+|--------|----------------------|--------------------------|
+| **POST**   | `/auth/verify-mobile`  | Send OTP to mobile      |
+| **POST**   | `/auth/verify-otp`     | Verify OTP              |
+| **POST**   | `/auth/set-mpin`       | Set MPIN for user       |
+| **POST**   | `/auth/login`          | Login using MPIN        |
+| **POST**   | `/auth/verify-mpin`    | Verify MPIN             |
+| **POST**   | `/auth/forgot-mpin`    | Reset MPIN with OTP     |
+
+## 🔧 Installation & Setup
+### 1️⃣ Clone the repository
+```sh
+git clone https://github.com/helloDevAman/Movie-Base.git
+cd Movie-Base
+```
+
+
+
+
 
 ### Other features are on the way...
