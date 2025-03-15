@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -21,13 +22,13 @@ type Config struct {
 	IMDBApiUrl       string
 }
 
-func LoadConfig() (*Config, error) {
+func LoadConfig() *Config {
 
 	// Load config from env vars
 	err := godotenv.Load()
 
 	if err != nil {
-		return nil, err
+		log.Fatal("Error loading .env file", err)
 	}
 
 	return &Config{
@@ -43,7 +44,7 @@ func LoadConfig() (*Config, error) {
 		TWILIOAuthToken:  getEnv("TWILIO_AUTH_TOKEN", ""),
 		IMDBApiKey:       getEnv("IMDB_API_KEY", ""),
 		IMDBApiUrl:       getEnv("IMDB_API_URL", ""),
-	}, nil
+	}
 }
 
 // getEnv follows Open/Closed Principle (OCP): Allows default values.

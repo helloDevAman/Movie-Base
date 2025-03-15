@@ -7,12 +7,10 @@ import (
 )
 
 func main() {
-	cfg, error := config.LoadConfig()
-
-	if error != nil {
-		log.Fatal("Error loading .env file", error)
-	}
+	// Load the configuration
+	cfg := config.LoadConfig()
 
 	log.Println("Server is running on port: ", cfg.ServerPort)
 	log.Println("Connecting to DB at: ", cfg.DBHost, ":", cfg.DBPort)
+
 }
