@@ -4,6 +4,8 @@ import (
 	"log"
 
 	"github.com/helloDevAman/movie-base/apis/config"
+	"github.com/helloDevAman/movie-base/apis/database"
+	"github.com/helloDevAman/movie-base/apis/routes"
 )
 
 func main() {
@@ -16,5 +18,17 @@ func main() {
 
 	log.Println("Server is running on port: ", cfg.ServerPort)
 	log.Println("Connecting to DB at: ", cfg.DBHost, ":", cfg.DBPort)
+
+	// Initialize PostgresDatabaseConnector
+	db, err := database.NewDatabaseConnector(cfg.DBType, cfg)
+
+	if err != nil {
+		log.Fatalf("Database connection error: %v", err)
+	}
+	log.Println("Connected to DB at: ", cfg.DBHost, ":", cfg.DBPort)
+	defer db.Close()
+
+	// Load the routes
+	routes.LoadRoutes(cfg)
 
 }

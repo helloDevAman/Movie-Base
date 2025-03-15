@@ -14,6 +14,7 @@ type ConfigLoader interface {
 
 // Config holds the configuration values
 type Config struct {
+	DBType           string
 	DBHost           string
 	DBPort           string
 	DBUser           string
@@ -39,6 +40,7 @@ func (e *EnvConfigLoader) Load() *Config {
 	}
 
 	return &Config{
+		DBType:           getEnv("DB_TYPE", "postgres"),
 		DBHost:           getEnv("DB_HOST", "localhost"),
 		DBPort:           getEnv("DB_PORT", "5432"),
 		DBUser:           getEnv("DB_USER", "postgres"),
