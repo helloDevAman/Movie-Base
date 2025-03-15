@@ -8,7 +8,11 @@ import (
 
 func main() {
 	// Load the configuration
-	cfg := config.LoadConfig()
+	loader := &config.EnvConfigLoader{}
+	cfg := config.LoadEnvConfig(loader)
+	if cfg == nil {
+		log.Fatalf("Failed to load configuration")
+	}
 
 	log.Println("Server is running on port: ", cfg.ServerPort)
 	log.Println("Connecting to DB at: ", cfg.DBHost, ":", cfg.DBPort)

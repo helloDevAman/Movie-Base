@@ -7,6 +7,12 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// ConfigLoader is the interface for loading configuration
+type ConfigLoader interface {
+	Load() *Config
+}
+
+// Config holds the configuration values
 type Config struct {
 	DBHost           string
 	DBPort           string
@@ -22,13 +28,14 @@ type Config struct {
 	IMDBApiUrl       string
 }
 
-func LoadConfig() *Config {
+// EnvConfigLoader loads configuration from environment variables
+type EnvConfigLoader struct{}
 
-	// Load config from env vars
+// Load loads the configuration from environment variables
+func (e *EnvConfigLoader) Load() *Config {
 	err := godotenv.Load()
-
 	if err != nil {
-		log.Fatal("Error loading .env file", err)
+		log.Println("Error loading .env file", err)
 	}
 
 	return &Config{
@@ -53,4 +60,9 @@ func getEnv(key, fallback string) string {
 		return value
 	}
 	return fallback
+}
+
+// LoadConfig loads the configuration using the provided loader
+func LoadEnvConfig(loader ConfigLoader) *Config {
+	return loader.Load()
 }
