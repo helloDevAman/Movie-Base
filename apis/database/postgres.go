@@ -16,8 +16,10 @@ type PostgresConnector struct {
 
 func NewPostgresConnector(cfg *config.Config) (*PostgresConnector, error) {
 	pg := &PostgresConnector{cfg: cfg}
-	err := pg.Connect()
-	return pg, err
+	if err := pg.Connect(); err != nil {
+		return nil, err
+	}
+	return pg, nil
 }
 
 func (p *PostgresConnector) Connect() error {
@@ -49,6 +51,6 @@ func (p *PostgresConnector) Close() {
 	}
 }
 
-func (p *PostgresConnector) GetConnection() interface{} {
+func (p *PostgresConnector) GetConnection() *sql.DB {
 	return p.db
 }

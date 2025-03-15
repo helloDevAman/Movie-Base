@@ -29,6 +29,6 @@ func main() {
 	defer db.Close()
 
 	// Load the routes
-	routes.LoadRoutes(cfg)
+	routes.LoadRoutes(cfg, db.GetConnection())
 
 }
