@@ -1,8 +1,6 @@
 package routes
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
 	"github.com/helloDevAman/movie-base/apis/config"
 )
@@ -17,8 +15,6 @@ func LoadRoutes(config *config.Config) {
 			"message": "pong",
 		})
 	})
-
-	log.Println("Routes loaded successfully: ", router.Routes())
 
 	router.Run(":" + config.ServerPort)
 }
