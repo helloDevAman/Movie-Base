@@ -3,7 +3,7 @@
 Movie-Base is a Go-based backend API designed for getting movie details on fingure tips
 
 
-## 🔥 Features
+## 🔥 Features completed
 1. User authentication via OTP (Twilio integration)
 2. Secure MPIN-based login system
 3. PostgreSQL database for storing user data
@@ -11,4 +11,4 @@ Movie-Base is a Go-based backend API designed for getting movie details on fingu
 5. API versioning in headers
 6. Secure token-based authentication for sessions
 
-## Other features are on the way
+### Other features are on the way...
