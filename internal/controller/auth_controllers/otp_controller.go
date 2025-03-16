@@ -11,12 +11,12 @@ import (
 	"github.com/helloDevAman/movie-base/utils"
 )
 
-type OTPHandler struct {
+type OTPController struct {
 	DB      *sql.DB
 	UseCase *auth_usecases.OTPUseCase
 }
 
-func (h *OTPHandler) SendOTP(c *gin.Context) {
+func (controller *OTPController) SendOTP(c *gin.Context) {
 	var request struct {
 		Mobile string `json:"mobile" binding:"required"`
 	}
@@ -29,7 +29,7 @@ func (h *OTPHandler) SendOTP(c *gin.Context) {
 	}
 
 	// Call the UseCase function to generate and store OTP
-	otp, err := h.UseCase.SendOTP(h.DB, request.Mobile)
+	otp, err := controller.UseCase.SendOTP(controller.DB, request.Mobile)
 	if err != nil {
 		log.Println("Error is", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to send OTP"})

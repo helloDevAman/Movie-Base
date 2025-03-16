@@ -16,10 +16,11 @@ type OTPRepository interface {
 
 type OTPRepositoryImpl struct{}
 
-func NewOTPRepo() OTPRepository {
+func NewOTPRepository() OTPRepository {
 	return &OTPRepositoryImpl{}
 }
 
+// Initialize OTP table if not exists
 func (r *OTPRepositoryImpl) InitOTPTable(db *sql.DB) error {
 	createTableQuery := `
 	CREATE TABLE IF NOT EXISTS otps (
@@ -37,9 +38,9 @@ func (r *OTPRepositoryImpl) InitOTPTable(db *sql.DB) error {
 	return nil
 }
 
-// Save OTP to database
+// Insert or update OTP in the database
 func (r *OTPRepositoryImpl) SaveOTP(db *sql.DB, otp *domain.OTP) error {
-	// Insert or update OTP in the database
+
 	upsertQuery := `
 	INSERT INTO otps (mobile, code, expires_at)
 	VALUES ($1, $2, $3)

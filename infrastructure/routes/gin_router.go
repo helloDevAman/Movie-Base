@@ -8,6 +8,7 @@ import (
 	auth_controlers "github.com/helloDevAman/movie-base/internal/controller/auth_controllers"
 	"github.com/helloDevAman/movie-base/internal/repository"
 	"github.com/helloDevAman/movie-base/internal/usecase/auth_usecases"
+	"github.com/helloDevAman/movie-base/utils"
 )
 
 func LoadRoutes(config *config.Config, db *sql.DB) {
@@ -16,20 +17,22 @@ func LoadRoutes(config *config.Config, db *sql.DB) {
 	api := router.Group(config.APIGroup)
 
 	// Load the auth routes
-	LoadAuthRoutes(api, db)
+	LoadAuthRoutes(config, api, db)
 
 	// Run the server
 	router.Run(":" + config.ServerPort)
 }
 
-func LoadAuthRoutes(api *gin.RouterGroup, db *sql.DB) {
-	authRepo := repository.NewOTPRepo()
+func LoadAuthRoutes(onfig *config.Config, api *gin.RouterGroup, db *sql.DB) {
+	smsService := utils.NewTwilioService(onfig)
+
+	authRepo := repository.NewOTPRepository()
 
 	authRepo.InitOTPTable(db)
 
-	authUseCase := auth_usecases.NewOTPUseCase(db, authRepo)
+	authUseCase := auth_usecases.NewOTPUseCase(db, authRepo, smsService)
 
-	authHandler := auth_controlers.OTPHandler{
+	authHandler := auth_controlers.OTPController{
 		DB:      db,
 		UseCase: authUseCase,
 	}

@@ -2,7 +2,8 @@ package auth_usecases
 
 import (
 	"database/sql"
-	"errors"
+	"fmt"
+	"log"
 	"time"
 
 	"github.com/helloDevAman/movie-base/internal/domain"
@@ -11,12 +12,13 @@ import (
 )
 
 type OTPUseCase struct {
-	DB      *sql.DB
-	OTPRepo repository.OTPRepository
+	DB         *sql.DB
+	OTPRepo    repository.OTPRepository
+	SMSService utils.SMSService
 }
 
-func NewOTPUseCase(db *sql.DB, repo repository.OTPRepository) *OTPUseCase {
-	return &OTPUseCase{DB: db, OTPRepo: repo}
+func NewOTPUseCase(db *sql.DB, repo repository.OTPRepository, smsService utils.SMSService) *OTPUseCase {
+	return &OTPUseCase{DB: db, OTPRepo: repo, SMSService: smsService}
 }
 
 func (u *OTPUseCase) SendOTP(db *sql.DB, mobile string) (*domain.OTP, error) {
@@ -34,25 +36,11 @@ func (u *OTPUseCase) SendOTP(db *sql.DB, mobile string) (*domain.OTP, error) {
 		return nil, err
 	}
 
-	// Simulate sending OTP (In production, integrate Twilio or other services)
-	// pkg.SendSMSTwilio(mobile, otpCode)
+	err = u.SMSService.SendOTP(mobile, otpCode)
+	if err != nil {
+		log.Println("Error sending OTP: ", err)
+		return nil, fmt.Errorf("failed to send OTP via Twilio")
+	}
 
 	return otp, nil
-}
-
-func (u *OTPUseCase) VerifyOTP(db *sql.DB, mobile, code string) error {
-	otp, err := u.OTPRepo.GetOTP(db, mobile)
-	if err != nil {
-		return errors.New("OTP not found")
-	}
-
-	if time.Now().After(otp.ExpiresAt) {
-		return errors.New("OTP expired")
-	}
-
-	if otp.Code != code {
-		return errors.New("Invalid OTP")
-	}
-
-	return nil
 }
