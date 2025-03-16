@@ -6,7 +6,7 @@ Movie-Base is a Go-based backend API designed for getting movie details on fingu
 ## 📜 API Endpoints
 | Method | Endpoint             | Description              |
 |--------|----------------------|--------------------------|
-| **POST**   | `/auth/verify-mobile`  | Send OTP to mobile      |
+| **POST**   | `/auth/send-otp`  | Send OTP to mobile      |
 | **POST**   | `/auth/verify-otp`     | Verify OTP              |
 | **POST**   | `/auth/set-mpin`       | Set MPIN for user       |
 | **POST**   | `/auth/login`          | Login using MPIN        |
