@@ -45,5 +45,17 @@ type ErrorResponse struct {
 }
 
 func (e ErrorResponse) ToJSON() gin.H {
+	if e.Code == 0 {
+		e.Code = 400
+	}
+
+	if e.Status == "" {
+		e.Status = "error"
+	}
+
+	if e.Message == "" {
+		e.Message = "An error occurred."
+	}
+
 	return gin.H{"status": e.Status, "code": e.Code, "message": e.Message}
 }

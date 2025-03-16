@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/helloDevAman/movie-base/config"
-	"github.com/helloDevAman/movie-base/internal/database"
-	"github.com/helloDevAman/movie-base/internal/routes"
+	"github.com/helloDevAman/movie-base/infrastructure/database"
+	"github.com/helloDevAman/movie-base/infrastructure/routes"
 )
 
 func main() {
