@@ -21,7 +21,7 @@ func Run(cfg *config.Config) {
 	defer db.Close()
 
 	// Start the server
-	ginRouteLoader := routes.LoadNewGinRoute(cfg)
+	ginRouteLoader := routes.LoadNewGinRoute(cfg, db)
 	router, err := ginRouteLoader.LoadRoutes()
 	if err != nil {
 		log.Fatalf("Failed to load routes: %v", err)

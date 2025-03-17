@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,6 +13,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/helloDevAman/movie-base/config"
+	"github.com/helloDevAman/movie-base/internal/interfaces/handler"
+	"github.com/helloDevAman/movie-base/internal/interfaces/middleware"
+	"github.com/helloDevAman/movie-base/internal/repository"
+	"github.com/helloDevAman/movie-base/internal/usecase"
 )
 
 type Route interface {
@@ -21,36 +26,36 @@ type Route interface {
 }
 
 type GinRouteLoader struct {
-	config *config.Config
+	cfg *config.Config
+	db  *sql.DB
 }
 
-func LoadNewGinRoute(config *config.Config) *GinRouteLoader {
-	return &GinRouteLoader{config: config}
+func LoadNewGinRoute(config *config.Config, db *sql.DB) *GinRouteLoader {
+	return &GinRouteLoader{cfg: config, db: db}
 }
 
 // Load routes without storing the router in struct
 func (g *GinRouteLoader) LoadRoutes() (*gin.Engine, error) {
 	router := gin.Default()
-	apiGroup := fmt.Sprintf("/%s/%s", g.config.App.Prefix, g.config.App.Version)
+	apiGroup := fmt.Sprintf("/%s/%s", g.cfg.App.Prefix, g.cfg.App.Version)
 	api := router.Group(apiGroup)
 
 	// Load API Routes (keep route definitions separate)
-	RegisterRoutes(api)
+	RegisterRoutes(g.cfg, g.db, api)
 
 	return router, nil
 }
 
-func RegisterRoutes(api *gin.RouterGroup) {
-	api.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
+func RegisterRoutes(cfg *config.Config, db *sql.DB, api *gin.RouterGroup) {
+	repo := repository.NewPostgresOTPRepository(db)
+	useCase := usecase.NewSendOTPUseCase(repo)
+	otpHandler := handler.NewSendOTPHandler(useCase)
+	api.POST(sendOTP, middleware.LoggingMiddleware(otpHandler.ServeHTTP))
 }
 
 func (g *GinRouteLoader) StartListening(router *gin.Engine) error {
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%s", g.config.App.Port),
+		Addr:    fmt.Sprintf(":%s", g.cfg.App.Port),
 		Handler: router,
 	}
 
@@ -60,7 +65,7 @@ func (g *GinRouteLoader) StartListening(router *gin.Engine) error {
 
 	// Run the server in a goroutine so that it doesn't block
 	go func() {
-		log.Printf("Server is running on port %s...", g.config.App.Port)
+		log.Printf("Server is running on port %s...", g.cfg.App.Port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Server error: %v", err)
 		}

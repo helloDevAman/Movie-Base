@@ -1,5 +1,5 @@
 package routes
 
 const (
-	sendOTP = "send-otp"
+	sendOTP = "auth/send-otp"
 )
