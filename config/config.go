@@ -40,7 +40,7 @@ type EnvConfigLoader struct{}
 func (envConfigLoader *EnvConfigLoader) Load() (*Config, error) {
 	cfg := &Config{}
 
-	err := godotenv.Load()
+	err := godotenv.Load("cmd/.env")
 
 	if err != nil {
 		return nil, err
