@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -40,10 +41,13 @@ type EnvConfigLoader struct{}
 func (envConfigLoader *EnvConfigLoader) Load() (*Config, error) {
 	cfg := &Config{}
 
-	err := godotenv.Load("cmd/.env")
-
+	err := godotenv.Load()
 	if err != nil {
-		return nil, err
+		log.Println("Warning: .env file not found, loading from cmd/.env")
+		err = godotenv.Load("cmd/.env")
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	cfg.DB.Host = getEnv("DB_HOST", cfg.DB.Host)
